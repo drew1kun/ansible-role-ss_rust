@@ -50,10 +50,20 @@ None
 Example Playbook
 ----
 
+**NOTE:** The use of [ansible-vault][ansible-vault-link] is strongly encouraged.
+
 ```yaml
 - hosts: shadowsocks
   roles:
-    - drew1kun.ss_rust
+    - role: drew1kun.ss_rust
+      ss_rust_config:
+        - server: 0.0.0.0
+          server_port: 8388
+          fast_open: false
+          timeout: 300
+          mode: tcp_and_udp
+          method: aes-256-gcm
+          password: "{{ vault_ss_pass }}"
 ```
 
 License
@@ -69,6 +79,7 @@ Andrew Shagayev | [e-mail](mailto:drewshg@gmail.com)
 [role-badge]: https://img.shields.io/badge/role-drew1kun.ss_rust-green.svg
 [galaxy-link]: https://galaxy.ansible.com/drew1kun/ss_rust/
 [mit-badge]: https://img.shields.io/badge/license-MIT-blue.svg
-[mit-link]: https://raw.githubusercontent.com/drew1kun/ansible-ss_rust/master/LICENSE
+[mit-link]: https://raw.githubusercontent.com/drew1kun/ansible-role-ss_rust/master/LICENSE
 [minibian-link]: https://minibianpi.wordpress.com/
 [rpi-os-link]: https://www.raspberrypi.com/software/operating-systems/
+[ansible-vault-link]: https://docs.ansible.com/ansible/latest/user_guide/vault.html
