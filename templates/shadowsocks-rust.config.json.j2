@@ -1,0 +1,15 @@
+{# https://craftcms.stackexchange.com/questions/2898/remove-trailing-comma-from-an-output-loop #}
+{# https://stackoverflow.com/questions/41743796/how-to-check-if-a-variable-is-an-integer-in-jinja2 #}
+{# https://stackoverflow.com/questions/55352265/jinja2-lowercase-only-bool-values #}
+{# https://stackoverflow.com/questions/67931370/ansible-jinja-to-json-filter-multiline-and-pretty-formatted #}
+{
+  "servers": [
+{% for server in ss_rust_config %}
+    {
+  {% for key, value in server.items() %}
+    "{{ key }}":{{ value | to_nice_json }}{{"," if not loop.last }}
+  {% endfor %}
+  }{{ "," if not loop.last }}
+{% endfor %}
+  ]
+}

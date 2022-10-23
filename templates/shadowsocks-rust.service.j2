@@ -1,0 +1,17 @@
+[Unit]
+Description=shadowsocks-rust service
+After=network.target
+
+[Service]
+StartLimitInterval=0
+ExecStart={{ ss_rust_bin }}/ssserver -c {{ ss_rust_etc }}
+ExecStop=/usr/bin/killall ssserver
+Restart=on-failure
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=ssserver
+User=nobody
+Group=nogroup
+
+[Install]
+WantedBy=multi-user.target

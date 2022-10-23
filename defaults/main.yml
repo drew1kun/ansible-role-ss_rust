@@ -1,0 +1,37 @@
+---
+# defaults file for ss_rust
+
+# BINARIES INFO
+# for installing it on raspberrypi-zero2:
+ss_rust:
+  vers: v1.14.3
+  arch: aarch64
+  dist: unknown-linux-gnu
+  repo: https://github.com/shadowsocks/shadowsocks-rust/releases/download
+  checksum: sha256:fdd27edefd932bb82c18e3b6d1a48813f16d599dbd061e45d1ce20907de09fce
+
+# shadowsocks-v1.14.3.aarch64-unknown-linux-gnu.tar.xz
+ss_rust_file: "shadowsocks-{{ ss_rust.vers }}.{{ ss_rust.arch }}-{{ ss_rust.dist }}.tar.xz"
+
+# https://github.com/shadowsocks/shadowsocks-rust/releases/download/v1.14.3/shadowsocks-v1.14.3.aarch64-unknown-linux-musl.tar.xz
+ss_rust_link: "{{ ss_rust.repo }}/{{ ss_rust.vers }}/{{ ss_rust_file }}"
+
+
+# INSTALLATION PATHS:
+ss_rust_bin: /usr/local/bin
+ss_rust_etc: /etc/shadowsocks-rust.config.json
+
+
+# SERVER CONFIGURATION:
+ss_rust_config:
+  - server: 0.0.0.0
+    server_port: 8388
+    fast_open: false
+    timeout: 300
+    mode: tcp_and_udp
+    method: aes-256-gcm
+    #
+    # Generate on linux or MacOS (ansible-vault usage is strongly encouraged):
+    # e.g.: < /dev/urandom tr -dc A-Za-z0-9 | head -c 32
+    # e.g.: openssl rand -base64 24 | head -c 32
+    password: 'o1un1VJ/4eoI6wG7jm/jS7fA8uHd2BZm'  # CHANGE THIS!

@@ -1,0 +1,43 @@
+---
+# tasks file for ss_rust
+
+- name: "[main] Fetch the binaries and validate the checksum"
+  ansible.builtin.get_url:
+    url: "{{ ss_rust_link }}"
+    dest: /tmp
+    checksum: "{{ ss_rust.checksum }}"
+  register: ss_rust_download_result
+  until: ss_rust_download_result is succeeded
+  tags: ss_rust
+
+- name: "[main] Install {{ ss_rust_filename }} binaries"
+  ansible.builtin.unarchive:
+    src: "/tmp/{{ ss_rust_file }}"
+    dest: "{{ ss_rust_bin }}"
+    remote_src: yes
+    mode: 0755
+    owner: root
+    group: root
+  notify: Restart ss service
+  become: true
+  tags: ss_rust
+
+- name: "[main] Generate shadowsocks-rust config and systemd unit-file"
+  ansible.builtin.template:
+    src: "{{ file_template.src }}"
+    dest: "{{ file_template.dest }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  loop:
+    - { src: 'shadowsocks-rust.config.json.j2', dest: '/etc/shadowsocks-rust.config.json' }
+    - { src: 'shadowsocks-rust.service.j2', dest: '/etc/systemd/system/shadowsocks-rust.service' }
+  loop_control:
+    loop_var: file_template
+  notify: Restart ss service
+  become: true
+  tags: ss_rust
+
+- name: "[main] Flush all handlers"
+  meta: flush_handlers
+  tags: ss_rust

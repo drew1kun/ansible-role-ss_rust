@@ -1,0 +1,10 @@
+---
+# handlers file for ss_rust
+
+- name: Restart ss service
+  ansible.builtin.systemd:
+    name: shadowsocks-rust
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  become: yes
